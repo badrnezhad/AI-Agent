@@ -90,9 +90,9 @@ def run_agent(user_input, memory, rag_index):
             + "Current execution plan:\n"
             + state["plan"]
             + "\n\n"
-            + ("Follow this plan as a guide"
-               "If a tool result shows that a astep is unnessesary "
-               "or another action is required, adapt the execution")
+            + ("Follow this plan as a guide. "
+               "If a tool result shows that a step is unnecessary "
+               "or another action is required, adapt the execution.")
     )
 
     for iteration in range(1, MAX_ITERATIONS + 1):
@@ -137,9 +137,11 @@ def run_agent(user_input, memory, rag_index):
             tool_name = item.name
             state["last_tool"] = tool_name
             print("Tool Call: ", tool_name)
-            arguments = json.loads(item.arguments)
-
-            tool_result = execute_tool(tool_name, arguments, rag_index)
+            try:
+                arguments = json.loads(item.arguments) if item.arguments else {}
+                tool_result = execute_tool(tool_name, arguments, rag_index)
+            except Exception as exc:
+                tool_result = json.dumps({"status": "error", "message": str(exc)}, ensure_ascii=False)
 
             print("Tool Result: ", tool_result)
 

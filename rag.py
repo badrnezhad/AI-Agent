@@ -6,12 +6,12 @@ from rag_steps.retrieval import get_vector_store, get_vector_counts, retrieve
 def prepare_rag():
     indexed_records = get_vector_store()
 
-    if get_vector_counts() == 0:
+    if get_vector_counts(indexed_records) == 0:
         documents = load_documents()
         clean_docs = clean(documents)
         chunks = chunk_documents(clean_docs)
         chunk_records = attach_metadata(chunks)
-        indexed_records = embed_and_index(chunk_records)
+        indexed_records = embed_and_index(chunk_records, indexed_records)
 
     return indexed_records
 

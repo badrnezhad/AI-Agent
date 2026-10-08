@@ -68,8 +68,9 @@ def attach_metadata(chunks: list[Document]):
     return chunk_records
 
 
-def embed_and_index(chunk_records):
+def embed_and_index(chunk_records, indexed_records=None):
     log("embed_and_index")
-    indexed_records = get_vector_store()
+    if indexed_records is None:
+        indexed_records = get_vector_store()
     indexed_records.add_documents(chunk_records)
     return indexed_records
