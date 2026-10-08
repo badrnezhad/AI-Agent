@@ -29,7 +29,8 @@ def get_vector_store():
     return vector_store
 
 
-def get_vector_counts():
+def get_vector_counts(vector_store=None):
     log("get_vector_counts")
-    vector_store = get_vector_store()
+    if vector_store is None:
+        vector_store = get_vector_store()
     return vector_store._collection.count()
